@@ -5,12 +5,15 @@ import type { Category } from "@/types/content";
 import { BlockingNavigationLink } from "@/components/ui/blocking-navigation-link";
 import { TopicsMenu } from "@/components/layout/topics-menu";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { isStudioEnabled } from "@/lib/feature-flags";
 
 type SiteHeaderProps = {
   categories: Category[];
 };
 
 export function SiteHeader({ categories }: SiteHeaderProps) {
+  const studioEnabled = isStudioEnabled();
+
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-bg-elevated/90 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center gap-6 px-5 py-4 md:px-8">
@@ -32,12 +35,21 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
             <TopicsMenu categories={categories} />
           </div>
           <BlockingNavigationLink
-            href="/studio/posts"
+            href="/about"
             className="inline-flex h-10 items-center rounded-full border border-border px-3 text-sm font-semibold transition-colors hover:border-accent hover:text-accent"
-            loadingText="Loading studio..."
+            loadingText="Loading about page..."
           >
-            Studio
+            About
           </BlockingNavigationLink>
+          {studioEnabled ? (
+            <BlockingNavigationLink
+              href="/studio/posts"
+              className="inline-flex h-10 items-center rounded-full border border-border px-3 text-sm font-semibold transition-colors hover:border-accent hover:text-accent"
+              loadingText="Loading studio..."
+            >
+              Studio
+            </BlockingNavigationLink>
+          ) : null}
           <BlockingNavigationLink
             href="/search"
             className="inline-flex h-10 items-center gap-2 rounded-full border border-border px-3 text-sm font-semibold transition-colors hover:border-accent hover:text-accent"

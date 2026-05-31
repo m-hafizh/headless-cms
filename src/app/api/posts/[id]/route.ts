@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { CONTENT_CACHE_TAG } from "@/lib/content/service";
+import { isStudioEnabled } from "@/lib/feature-flags";
 import {
   deleteManagedPost,
   getManagedPostById,
@@ -85,6 +86,16 @@ function handleWordPressError(error: unknown): NextResponse {
 }
 
 function verifyCrudConfig(): NextResponse | null {
+  if (!isStudioEnabled()) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "Not found.",
+      },
+      { status: 404 },
+    );
+  }
+
   if (isWordPressPostCrudConfigured()) {
     return null;
   }

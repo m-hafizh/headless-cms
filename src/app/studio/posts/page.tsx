@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 import { PostCrudPanel } from "@/components/posts/post-crud-panel";
+import { isStudioEnabled } from "@/lib/feature-flags";
 import {
   getWordPressRestBaseUrl,
   isWordPressPostCrudConfigured,
@@ -19,6 +21,10 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default function PostStudioPage() {
+  if (!isStudioEnabled()) {
+    notFound();
+  }
+
   const restBaseUrl = getWordPressRestBaseUrl();
   const isConfigured = isWordPressPostCrudConfigured();
 
