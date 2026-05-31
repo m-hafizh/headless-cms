@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/articles/article-card";
 import { ArticleMeta } from "@/components/articles/article-meta";
 import { ArticleRichContent } from "@/components/articles/article-rich-content";
+import { BlockingNavigationLink } from "@/components/ui/blocking-navigation-link";
 import {
   getArticleBySlug,
   getRelatedArticles,
@@ -82,12 +83,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       ) : null}
 
       <article className="mx-auto w-full max-w-3xl space-y-7">
-        <Link
+        <BlockingNavigationLink
           href={`/categories/${article.category.slug}`}
           className="inline-flex rounded-full border border-border px-3 py-1 text-xs font-semibold uppercase tracking-widest text-ink-muted transition-colors hover:border-accent hover:text-accent"
+          loadingText="Loading category posts..."
         >
           {article.category.name}
-        </Link>
+        </BlockingNavigationLink>
 
         <h1 className="font-serif text-4xl leading-tight text-ink md:text-5xl">
           {article.title}
@@ -117,12 +119,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <div className="rounded-3xl border border-border bg-surface p-6">
           <p className="font-serif text-2xl text-ink">{article.author.name}</p>
           <p className="mt-2 text-ink-muted">{article.author.bio}</p>
-          <Link
+          <BlockingNavigationLink
             href={`/authors/${article.author.slug}`}
             className="mt-4 inline-flex text-sm font-semibold text-accent underline-offset-4 hover:underline"
+            loadingText="Loading author posts..."
           >
             View all posts by {article.author.name}
-          </Link>
+          </BlockingNavigationLink>
         </div>
       </section>
 

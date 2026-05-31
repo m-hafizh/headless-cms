@@ -1,8 +1,8 @@
-import Link from "next/link";
 import Image from "next/image";
 
 import type { Article } from "@/types/content";
 import { ArticleMeta } from "@/components/articles/article-meta";
+import { BlockingNavigationLink } from "@/components/ui/blocking-navigation-link";
 
 type ArticleCardProps = {
   article: Article;
@@ -39,24 +39,26 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
       </div>
 
       <div className="flex flex-col gap-4 p-6">
-        <Link
+        <BlockingNavigationLink
           href={`/articles/${article.slug}`}
           className="inline-flex w-fit rounded-full border border-border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted transition-colors hover:border-accent hover:text-accent"
+          loadingText="Loading article..."
         >
           {article.category.name}
-        </Link>
+        </BlockingNavigationLink>
 
         <h2
           className={`font-serif leading-tight text-ink ${
             featured ? "text-3xl" : "text-2xl"
           }`}
         >
-          <Link
+          <BlockingNavigationLink
             href={`/articles/${article.slug}`}
             className="decoration-accent/50 underline-offset-4 transition-colors hover:text-accent hover:underline"
+            loadingText="Loading article..."
           >
             {article.title}
-          </Link>
+          </BlockingNavigationLink>
         </h2>
 
         <p className="text-base leading-7 text-ink-muted">

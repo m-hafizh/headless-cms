@@ -36,7 +36,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const categories = await getTopCategories(6);
+  const categories = await getTopCategories(40);
 
   return (
     <html
@@ -44,7 +44,7 @@ export default async function RootLayout({
       suppressHydrationWarning
       className={`${sansFont.variable} ${serifFont.variable} ${monoFont.variable} h-full antialiased`}
     >
-      <body className="min-h-full">
+      <body suppressHydrationWarning className="min-h-full">
         <ThemeProvider>
           <div className="flex min-h-screen flex-col">
             <SiteHeader categories={categories} />

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { ArticleCard } from "@/components/articles/article-card";
+import { BlockingNavigationLink } from "@/components/ui/blocking-navigation-link";
 import { getArticlesByAuthor } from "@/lib/content/service";
 
 type AuthorPageProps = {
@@ -52,12 +52,13 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   return (
     <div className="mx-auto w-full max-w-6xl space-y-8 px-5 md:px-8">
       <header className="space-y-3 rounded-3xl border border-border bg-surface p-8">
-        <Link
+        <BlockingNavigationLink
           href="/"
           className="text-sm font-semibold uppercase tracking-[0.1em] text-ink-muted"
+          loadingText="Loading homepage..."
         >
           Back to home
-        </Link>
+        </BlockingNavigationLink>
         <h1 className="font-serif text-5xl text-ink">
           {author?.name ?? "Author"}
         </h1>

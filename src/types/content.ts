@@ -38,13 +38,14 @@ export type Article = {
 
 export type ArticleSearchHit = {
   objectID: string;
-  slug: string;
-  title: string;
-  excerpt: string;
-  categoryName?: string;
-  authorName?: string;
-  readingTimeMinutes?: number;
-  publishedAt?: string;
+  post_title?: string;
+  content?: string;
+  permalink?: string;
+  post_date_formatted?: string;
+  taxonomies?: {
+    category?: string[];
+  };
+  [key: string]: unknown;
 };
 
 export type PostStatus = "draft" | "publish" | "pending" | "private";

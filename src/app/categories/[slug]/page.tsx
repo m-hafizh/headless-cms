@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { ArticleCard } from "@/components/articles/article-card";
+import { BlockingNavigationLink } from "@/components/ui/blocking-navigation-link";
 import { getArticlesByCategory } from "@/lib/content/service";
 
 type CategoryPageProps = {
@@ -55,12 +55,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <div className="mx-auto w-full max-w-6xl space-y-8 px-5 md:px-8">
       <header className="space-y-3">
-        <Link
+        <BlockingNavigationLink
           href="/"
           className="text-sm font-semibold uppercase tracking-[0.1em] text-ink-muted"
+          loadingText="Loading homepage..."
         >
           Back to home
-        </Link>
+        </BlockingNavigationLink>
         <h1 className="font-serif text-5xl text-ink">{categoryTitle}</h1>
         <p className="max-w-2xl text-lg text-ink-muted">
           {categoryDescription}

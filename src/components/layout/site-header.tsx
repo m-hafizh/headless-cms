@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Search } from "lucide-react";
 
 import type { Category } from "@/types/content";
+import { BlockingNavigationLink } from "@/components/ui/blocking-navigation-link";
+import { TopicsMenu } from "@/components/layout/topics-menu";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 type SiteHeaderProps = {
@@ -21,32 +23,29 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
           </p>
         </Link>
 
-        <nav className="hidden min-w-0 flex-1 items-center gap-3 overflow-x-auto md:flex">
-          {categories.map((category) => (
-            <Link
-              key={category.id}
-              href={`/categories/${category.slug}`}
-              className="rounded-full border border-border px-3 py-1 text-xs font-semibold tracking-[0.08em] text-ink-muted transition-colors hover:border-accent hover:text-accent"
-            >
-              {category.name}
-            </Link>
-          ))}
-        </nav>
+        <div className="hidden min-w-0 flex-1 items-center md:flex">
+          <TopicsMenu categories={categories} />
+        </div>
 
         <div className="ml-auto flex items-center gap-2">
-          <Link
+          <div className="md:hidden">
+            <TopicsMenu categories={categories} />
+          </div>
+          <BlockingNavigationLink
             href="/studio/posts"
             className="inline-flex h-10 items-center rounded-full border border-border px-3 text-sm font-semibold transition-colors hover:border-accent hover:text-accent"
+            loadingText="Loading studio..."
           >
             Studio
-          </Link>
-          <Link
+          </BlockingNavigationLink>
+          <BlockingNavigationLink
             href="/search"
             className="inline-flex h-10 items-center gap-2 rounded-full border border-border px-3 text-sm font-semibold transition-colors hover:border-accent hover:text-accent"
+            loadingText="Loading search..."
           >
             <Search className="h-4 w-4" />
             <span className="hidden sm:inline">Search</span>
-          </Link>
+          </BlockingNavigationLink>
           <ThemeToggle />
         </div>
       </div>
