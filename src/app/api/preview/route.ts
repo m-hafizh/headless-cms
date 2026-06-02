@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
   const draft = await draftMode();
   draft.enable();
 
-  const redirectUrl = new URL(`/articles/${encodeURIComponent(slug)}`, request.url);
+  const redirectUrl = new URL(`/blog/${encodeURIComponent(slug)}`, request.url);
   redirectUrl.searchParams.set("preview", "1");
 
   return NextResponse.redirect(redirectUrl);

@@ -50,7 +50,7 @@ function getArticleSlug(hit: ArticleSearchHit): string | null {
 
 function getArticleHref(hit: ArticleSearchHit): string {
   const slug = getArticleSlug(hit);
-  return slug ? `/articles/${encodeURIComponent(slug)}` : "#";
+  return slug ? `/blog/${encodeURIComponent(slug)}` : "#";
 }
 
 export function SearchPanel() {

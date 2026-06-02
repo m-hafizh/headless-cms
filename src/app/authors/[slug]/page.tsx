@@ -28,17 +28,24 @@ export async function generateMetadata({
   const authorName = articles[0]?.author.name ?? toTitleCaseFromSlug(slug);
   const authorBio =
     articles[0]?.author.bio ?? `Technical articles written by ${authorName}.`;
+  const canonicalPath = `/authors/${slug}`;
 
   return {
     title: `${authorName} Articles`,
     description: authorBio,
     alternates: {
-      canonical: `/authors/${slug}`,
+      canonical: canonicalPath,
     },
     openGraph: {
       title: `${authorName} Articles`,
       description: authorBio,
       type: "profile",
+      url: canonicalPath,
+    },
+    twitter: {
+      card: "summary",
+      title: `${authorName} Articles`,
+      description: authorBio,
     },
   };
 }

@@ -5,6 +5,7 @@ import type { Article, Author, Category } from "@/types/content";
 import {
   CATEGORY_LIST_QUERY,
   HOME_FEED_QUERY,
+  PAGINATED_POSTS_QUERY,
   POST_BY_SLUG_QUERY,
   POSTS_BY_AUTHOR_QUERY,
   POSTS_BY_CATEGORY_QUERY,
@@ -76,6 +77,16 @@ type HomeFeedResponse = {
   };
 };
 
+type PaginatedPostsResponse = {
+  posts: {
+    nodes: WPPostNode[];
+    pageInfo?: {
+      hasNextPage?: boolean | null;
+      endCursor?: string | null;
+    } | null;
+  };
+};
+
 type PostBySlugResponse = {
   post: WPPostNode | null;
 };
@@ -84,6 +95,13 @@ type CategoryListResponse = {
   categories: {
     nodes: WPTermNode[];
   };
+};
+
+export type PaginatedArticleCollection = {
+  articles: Article[];
+  currentPage: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 };
 
 function isTruthyString(value: string | undefined): value is string {
@@ -205,6 +223,83 @@ export async function getHomepageArticles(limit = 9): Promise<Article[]> {
   } catch (error) {
     console.error("Falling back to local sample data for home feed", error);
     return withFeaturedFlag(sampleArticles.slice(0, limit));
+  }
+}
+
+export async function getPaginatedArticles(
+  page = 1,
+  pageSize = 8,
+): Promise<PaginatedArticleCollection> {
+  const safePage = Math.max(1, page);
+  const safePageSize = Math.min(24, Math.max(1, pageSize));
+
+  if (!isWordPressConfigured()) {
+    const start = (safePage - 1) * safePageSize;
+    const end = start + safePageSize;
+
+    return {
+      articles: sampleArticles.slice(start, end),
+      currentPage: safePage,
+      hasNextPage: sampleArticles.length > end,
+      hasPreviousPage: safePage > 1,
+    };
+  }
+
+  try {
+    let afterCursor: string | null = null;
+
+    for (let currentPage = 1; currentPage <= safePage; currentPage += 1) {
+      const pageResponse: PaginatedPostsResponse = await requestWordPress<PaginatedPostsResponse>(
+        PAGINATED_POSTS_QUERY,
+        {
+          first: safePageSize,
+          after: afterCursor,
+        },
+      );
+
+      const nodes = pageResponse.posts.nodes.map(mapPost);
+      const hasNextPage = Boolean(pageResponse.posts.pageInfo?.hasNextPage);
+      const endCursor = pageResponse.posts.pageInfo?.endCursor ?? null;
+
+      if (currentPage === safePage) {
+        return {
+          articles: nodes,
+          currentPage: safePage,
+          hasNextPage,
+          hasPreviousPage: safePage > 1,
+        };
+      }
+
+      if (!hasNextPage || !endCursor) {
+        return {
+          articles: [],
+          currentPage: safePage,
+          hasNextPage: false,
+          hasPreviousPage: safePage > 1,
+        };
+      }
+
+      afterCursor = endCursor;
+    }
+
+    return {
+      articles: [],
+      currentPage: safePage,
+      hasNextPage: false,
+      hasPreviousPage: safePage > 1,
+    };
+  } catch (error) {
+    console.error("Falling back to local paginated posts", error);
+
+    const start = (safePage - 1) * safePageSize;
+    const end = start + safePageSize;
+
+    return {
+      articles: sampleArticles.slice(start, end),
+      currentPage: safePage,
+      hasNextPage: sampleArticles.length > end,
+      hasPreviousPage: safePage > 1,
+    };
   }
 }
 

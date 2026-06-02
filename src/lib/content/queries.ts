@@ -48,6 +48,61 @@ export const HOME_FEED_QUERY = `
   }
 `;
 
+export const PAGINATED_POSTS_QUERY = `
+  query PaginatedPosts($first: Int!, $after: String) {
+    posts(
+      first: $first
+      after: $after
+      where: { status: PUBLISH, orderby: { field: DATE, order: DESC } }
+    ) {
+      nodes {
+        id
+        slug
+        title
+        excerpt
+        content
+        date
+        modified
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+        categories {
+          nodes {
+            id
+            name
+            slug
+            description
+          }
+        }
+        tags {
+          nodes {
+            name
+            slug
+          }
+        }
+        author {
+          node {
+            id
+            slug
+            name
+            description
+            avatar {
+              url
+            }
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+`;
+
 export const POST_BY_SLUG_QUERY = `
   query PostBySlug($slug: ID!, $asPreview: Boolean = false) {
     post(id: $slug, idType: SLUG, asPreview: $asPreview) {

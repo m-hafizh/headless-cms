@@ -188,6 +188,7 @@ export async function POST(request: NextRequest) {
     revalidateTag(CONTENT_CACHE_TAG, "max");
     revalidatePath("/");
     revalidatePath("/search");
+    revalidatePath(`/blog/${created.slug}`);
     revalidatePath(`/articles/${created.slug}`);
 
     return NextResponse.json(

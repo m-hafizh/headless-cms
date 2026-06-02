@@ -29,17 +29,24 @@ export async function generateMetadata({
   const categoryDescription =
     articles[0]?.category.description ??
     `Technical articles curated for ${categoryTitle}.`;
+  const canonicalPath = `/categories/${slug}`;
 
   return {
     title: `${categoryTitle} Articles`,
     description: categoryDescription,
     alternates: {
-      canonical: `/categories/${slug}`,
+      canonical: canonicalPath,
     },
     openGraph: {
       title: `${categoryTitle} Articles`,
       description: categoryDescription,
       type: "website",
+      url: canonicalPath,
+    },
+    twitter: {
+      card: "summary",
+      title: `${categoryTitle} Articles`,
+      description: categoryDescription,
     },
   };
 }

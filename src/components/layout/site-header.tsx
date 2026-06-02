@@ -41,6 +41,13 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
           >
             About
           </BlockingNavigationLink>
+          <BlockingNavigationLink
+            href="/blog"
+            className="inline-flex h-10 items-center rounded-full border border-border px-3 text-sm font-semibold transition-colors hover:border-accent hover:text-accent"
+            loadingText="Loading blog page..."
+          >
+            Blog
+          </BlockingNavigationLink>
           {studioEnabled ? (
             <BlockingNavigationLink
               href="/studio/posts"

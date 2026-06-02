@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -21,6 +22,16 @@ type ArticlePageProps = {
 
 export const revalidate = 1800;
 
+function getSiteUrl(): string {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+
+  if (!siteUrl) {
+    return "http://localhost:3000";
+  }
+
+  return siteUrl.endsWith("/") ? siteUrl.slice(0, -1) : siteUrl;
+}
+
 export async function generateMetadata({
   params,
 }: ArticlePageProps): Promise<Metadata> {
@@ -37,13 +48,41 @@ export async function generateMetadata({
     };
   }
 
+  const siteUrl = getSiteUrl();
+  const canonicalPath = `/blog/${slug}`;
+  const canonicalUrl = `${siteUrl}${canonicalPath}`;
+  const openGraphImages = article.coverImageUrl
+    ? [
+        {
+          url: article.coverImageUrl,
+          alt: article.coverImageAlt,
+        },
+      ]
+    : undefined;
+  const twitterImages = article.coverImageUrl ? [article.coverImageUrl] : undefined;
+
   return {
     title: article.seo.title,
     description: article.seo.description,
+    alternates: {
+      canonical: canonicalPath,
+    },
     openGraph: {
       title: article.seo.title,
       description: article.seo.description,
       type: "article",
+      url: canonicalUrl,
+      publishedTime: article.publishedAt,
+      modifiedTime: article.updatedAt,
+      authors: [article.author.name],
+      tags: article.tags,
+      images: openGraphImages,
+    },
+    twitter: {
+      card: article.coverImageUrl ? "summary_large_image" : "summary",
+      title: article.seo.title,
+      description: article.seo.description,
+      images: twitterImages,
     },
   };
 }
@@ -96,6 +135,19 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </h1>
 
         <ArticleMeta article={article} />
+
+        {article.coverImageUrl ? (
+          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-border bg-surface-contrast">
+            <Image
+              src={article.coverImageUrl}
+              alt={article.coverImageAlt}
+              fill
+              sizes="(min-width: 1024px) 768px, (min-width: 768px) 90vw, 100vw"
+              className="object-cover"
+              priority
+            />
+          </div>
+        ) : null}
 
         <ArticleRichContent
           contentHtml={

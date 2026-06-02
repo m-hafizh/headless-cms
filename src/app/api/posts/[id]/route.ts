@@ -205,6 +205,8 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     revalidateTag(CONTENT_CACHE_TAG, "max");
     revalidatePath("/");
     revalidatePath("/search");
+    revalidatePath(`/blog/${previousPost.slug}`);
+    revalidatePath(`/blog/${updated.slug}`);
     revalidatePath(`/articles/${previousPost.slug}`);
     revalidatePath(`/articles/${updated.slug}`);
 
@@ -243,6 +245,7 @@ export async function DELETE(_request: NextRequest, context: RouteContext) {
     revalidateTag(CONTENT_CACHE_TAG, "max");
     revalidatePath("/");
     revalidatePath("/search");
+    revalidatePath(`/blog/${previousPost.slug}`);
     revalidatePath(`/articles/${previousPost.slug}`);
 
     return NextResponse.json({

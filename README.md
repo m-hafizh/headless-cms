@@ -67,7 +67,10 @@ If you see `rest_forbidden_context` or `Sorry, you are not allowed to edit posts
 ### Current Routes
 - `/` home feed
 - `/about` publication overview
+- `/blog` blog listing with `?page=` pagination
+- `/blog/[slug]` blog article detail
 - `/articles/[slug]` article detail
+- `/category/[slug]` category alias route
 - `/categories` topic index
 - `/categories/[slug]` category listing
 - `/authors/[slug]` author listing

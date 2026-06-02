@@ -34,6 +34,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.5,
     },
     {
+      url: `${siteUrl}/blog`,
+      changeFrequency: "daily",
+      priority: 0.8,
+    },
+    {
       url: `${siteUrl}/about`,
       changeFrequency: "monthly",
       priority: 0.4,
@@ -41,7 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const articleRoutes: MetadataRoute.Sitemap = articles.map((article) => ({
-    url: `${siteUrl}/articles/${article.slug}`,
+    url: `${siteUrl}/blog/${article.slug}`,
     lastModified: article.updatedAt,
     changeFrequency: "daily",
     priority: article.isFeatured ? 0.9 : 0.8,

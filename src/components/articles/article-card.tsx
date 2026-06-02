@@ -7,9 +7,16 @@ import { BlockingNavigationLink } from "@/components/ui/blocking-navigation-link
 type ArticleCardProps = {
   article: Article;
   featured?: boolean;
+  articleHrefBasePath?: string;
 };
 
-export function ArticleCard({ article, featured = false }: ArticleCardProps) {
+export function ArticleCard({
+  article,
+  featured = false,
+  articleHrefBasePath = "/blog",
+}: ArticleCardProps) {
+  const articleHref = `${articleHrefBasePath}/${article.slug}`;
+
   return (
     <article
       className={`group relative overflow-hidden rounded-3xl border border-border bg-surface shadow-[var(--card-shadow)] transition-colors hover:border-accent ${
@@ -40,7 +47,7 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
 
       <div className="flex flex-col gap-4 p-6">
         <BlockingNavigationLink
-          href={`/articles/${article.slug}`}
+          href={articleHref}
           className="inline-flex w-fit rounded-full border border-border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted transition-colors hover:border-accent hover:text-accent"
           loadingText="Loading article..."
         >
@@ -53,7 +60,7 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
           }`}
         >
           <BlockingNavigationLink
-            href={`/articles/${article.slug}`}
+            href={articleHref}
             className="decoration-accent/50 underline-offset-4 transition-colors hover:text-accent hover:underline"
             loadingText="Loading article..."
           >
